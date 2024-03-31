@@ -1,7 +1,7 @@
 from http.server import HTTPServer
 from pysimplesoap.server import SoapDispatcher, SOAPHandler
 
-# Realizamos la funcion para la operacion de la suma
+# Realizamos la funcion para la operacion de la suma de dos numeros enteros
 def sumaDosNumeros(num1, num2):
     return num1 + num2
 
