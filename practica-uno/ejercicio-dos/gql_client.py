@@ -14,7 +14,7 @@ mutation {
                 frutos
             }
         }
-}
+    }
 """
 
 response_mutation = requests.post(url, json={'query': query_crear})

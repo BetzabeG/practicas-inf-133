@@ -9,6 +9,12 @@ class Planta(ObjectType):
     edad = Int()
     altura = Int()
     frutos = Boolean()
+    
+plantas = [
+    Planta(id=1, nombre="Rosa", especie="Rosa", edad=3, altura=50, frutos=False),
+    Planta(id=2, nombre="Aloe vera", especie="Aloe", edad=2, altura=30, frutos=False),
+    Planta(id=3, nombre="Manzano", especie="Malus domestica", edad=5, altura=200, frutos=True),
+]
 
 class Query(ObjectType):
     plantas = List(Planta)
@@ -48,12 +54,6 @@ class CrearPlanta(Mutation):
 class Mutations(ObjectType):
     crear_planta = CrearPlanta.Field()
     
-plantas = [
-    Planta(id=1, nombre="Rosa", especie="Rosa", edad=3, altura=50, frutos=False),
-    Planta(id=2, nombre="Aloe vera", especie="Aloe", edad=2, altura=30, frutos=False),
-    Planta(id=3, nombre="Manzano", especie="Malus domestica", edad=5, altura=200, frutos=True),
-]   
-
 schema = Schema(query=Query, mutation=Mutations)
 
 class GraphQLRequestHandler(BaseHTTPRequestHandler):
