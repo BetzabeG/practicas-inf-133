@@ -10,25 +10,61 @@ class Planta(ObjectType):
     altura = Int()
     frutos = Boolean()
     
-plantas = [
-    Planta(id=1, nombre="Rosa", especie="Rosa", edad=3, altura=50, frutos=False),
-    Planta(id=2, nombre="Aloe vera", especie="Aloe", edad=2, altura=30, frutos=False),
-    Planta(id=3, nombre="Manzano", especie="Malus domestica", edad=5, altura=200, frutos=True),
-]
-
 class Query(ObjectType):
     plantas = List(Planta)
-    planta_por_id = Field(Planta, id=Int())
-    
+    plantas_por_especie = List(Planta, especie=String())
+    plantas_tienen_frutos = List(Planta)
+# Listar todas las plantas   
     def resolve_plantas(root, info):
         return plantas
-    
-    def resolve_plantas_por_id(root, info, id):
+# Buscar plantas por especie   
+    def resolve_plantas_por_especie(root, info, especie):
+        plantas_encontradas = []
+        for planta in plantas:
+            if planta.especie == especie:
+                plantas_encontradas.append(planta)
+        return plantas_encontradas  
+
+# Buscar las plantas que tienen frutos 
+    def resolve_plantas_tienen_frutos(root, info):
+        plantas_encontradas = []
+        for planta in plantas:
+            if planta.frutos:
+                plantas_encontradas.append(planta)
+        return plantas_encontradas
+
+# Actualizar la información de una planta
+class ActualizarPlanta(Mutation):
+    class Arguments:
+        id = Int()
+        nombre = String()
+        especie = String()
+        edad = Int()
+        altura = Int()
+        frutos = Boolean()
+    planta = Field(Planta)
+    def mutate(root, info, id, nombre, especie, edad, altura, frutos):
         for planta in plantas:
             if planta.id == id:
-                return planta
-        return None   
+                planta.nombre == nombre
+                planta.especie == especie
+                planta.edad == edad
+                planta.altura == altura
+                planta.frutos == frutos
+                return ActualizarPlanta(planta = planta)
+# Eliminar una planta
+class EliminarPlanta(Mutation):
+    class Arguments:
+        id = Int()
+    planta = Field(Planta)
+    def mutate(root, info, id):
+        for i, planta in enumerate(plantas):
+            if planta.id == id:
+                plantas.pop(i)
+                return EliminarPlanta(planta=planta)
+        return None
     
+# Crear una planta    
 class CrearPlanta(Mutation):
     class Arguments:
         nombre = String()
@@ -53,6 +89,17 @@ class CrearPlanta(Mutation):
         
 class Mutations(ObjectType):
     crear_planta = CrearPlanta.Field()
+    actualizar_planta = ActualizarPlanta.Field()
+    eliminar_planta = EliminarPlanta.Field()
+    
+    
+plantas = [
+    Planta(id=1, nombre="Ortiga comun", especie="Urtica dioica", edad=3, altura=150, frutos=False),
+    Planta(id=2, nombre="Olmo blanco", especie="Ulmaceae", edad=12, altura=200, frutos=False),
+    Planta(id=3, nombre="Mora china", especie="Rubus fruticosus", edad=5, altura=30, frutos=True),
+    Planta(id=4, nombre="Zarzamora", especie="Rubus fruticosus", edad=8, altura=3, frutos=True),
+
+]
     
 schema = Schema(query=Query, mutation=Mutations)
 
